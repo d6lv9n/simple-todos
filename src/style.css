@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        @apply bg-gray-900 min-h-full min-w-full w-full;
+    }
+
+    body, #app {
+        @apply min-h-screen min-w-full text-white w-full;
+    }
+}
