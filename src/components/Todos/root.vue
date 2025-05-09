@@ -3,6 +3,8 @@
     lg:max-w-2xl lg:mx-auto lg:w-1/2">
         <Todo
         v-for="todo in todos"
+        @edit="() => {}"
+        @delete="() => {}"
         :key="todo.id"
         :todo="todo"
         />

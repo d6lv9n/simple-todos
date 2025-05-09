@@ -4,7 +4,7 @@
 
         <span class="text-gray-300 text-sm">{{ createdAt }}</span>
 
-        <div class="absolute -top-3 -right-2">
+        <div class="absolute -top-3 right-0">
             <button
             @click="() => {}"
             class="bg-green-500 text-white px-2 py-1 rounded-full mr-2">
@@ -45,7 +45,7 @@ const createdAt = computed(() => {
 
 const currentTime = DateTime.now();
 
-defineEmits(['delete']);
+defineEmits(['edit', 'delete']);
 
 const props = defineProps({
     todo: {
