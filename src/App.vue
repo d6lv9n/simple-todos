@@ -7,8 +7,10 @@
 
     <Todos
     v-if="todos.length > 0"
-    :todos="todos"
-    />
+    @editTodo="editTodo"
+    @deleteTodo="deleteTodo"
+    @updateTodo="updateTodo"
+    :todos="todos"/>
   </div>
 </template>
 
@@ -32,22 +34,63 @@ watch(todos, (newTodos) => {
 
 function addTodo(todo)
 {
-  console.log('Added todo:', todo);
-
-  if (todos.value.some((t) => t.title === todo.title)) {
-    console.error('Todo already exists');
-    return;
-  }
-
-  if (todos.value.length >= 5) {
-    console.error('Todo list is full');
+  if (todos.value.length >= 5 || todos.value.some((t) => t.title === todo.title)) {
     return;
   }
 
   // This will trigger the watcher
   todos.value = [ ...todos.value, todo];
+}
 
-  console.log('Todos:', todos.value);
+function editTodo(id)
+{
+  if (todos.value.length === 0) {
+    return;
+  }
+
+  const index = todos.value.findIndex(item => item.id === id);
+
+  if (index === -1 || todos.value[index].edit) {
+    return;
+  }
+
+  todos.value = todos.value.map(todo => {
+    return todo.id === id
+    ? { ...todo, edit: true }
+    : { ...todo, edit: false }
+  });
+
+  console.log('new todos:', todos.value);
+}
+
+function deleteTodo(id)
+{
+  if (todos.value.length === 0) {
+    return;
+  }
+
+  const todo = todos.value.find(item => item.id === id);
+
+  if (! todo || todo.edit) {
+    return;
+  }
+
+  todos.value = todos.value.filter(item => item.id !== todo.id);
+}
+
+function updateTodo({ id, title })
+{
+  console.log('updateTodo:', { id, title });
+
+  if (todos.value.length === 0 || ! todos.value.find(item => item.id === id)) {
+    return;
+  }
+
+  todos.value = todos.value.map(todo => {
+    return todo.id === id
+    ? { ...todo, title, edit: false }
+    : { ...todo }
+  });
 }
 
 function getLocalTodos()
@@ -89,6 +132,10 @@ function validateTodos(localTodos)
       throw new Error('Invalid todos format');
     }
 
+    parsedTodos.forEach(item => {
+      item.edit = false; // Set edit mode to false
+    });
+
     return parsedTodos;
   } catch (exception) {
     console.error(exception);
@@ -105,7 +152,6 @@ onBeforeMount(() => {
   todos.value = localTodos;
 });
 onMounted(() => {
-  console.log('Mounted');
   mounted.value = true;
 });
 </script>

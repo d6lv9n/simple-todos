@@ -37,7 +37,7 @@ function add()
 
     const todo = {
         id: Date.now(),
-        title: title.value,
+        title: title.value.trim(),
         edit: false,
         // completed: false,
         createdAt: Math.floor(DateTime.now().setZone('UTC').toMillis() / 1000),

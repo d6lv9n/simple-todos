@@ -1,13 +1,13 @@
 <template>
-    <div class="flex flex-col gap-y-6 mt-1.5 w-full
+    <div class="flex flex-col gap-y-8 mt-1.5 w-full
     lg:max-w-2xl lg:mx-auto lg:w-1/2">
         <Todo
         v-for="todo in todos"
-        @edit="() => {}"
-        @delete="() => {}"
+        @editTodo="$emit('editTodo', todo.id)"
+        @deleteTodo="$emit('deleteTodo', todo.id)"
+        @updateTodo="$emit('updateTodo', $event)"
         :key="todo.id"
-        :todo="todo"
-        />
+        :todo="todo"/>
     </div>
 </template>
 
@@ -15,10 +15,9 @@
 import Todo from './todo.vue';
 // import { defineProps } from 'vue';
 
-defineProps({
-    todos: {
-        type: Array,
-        required: true,
-    },
+const { todos } = defineProps({
+    todos: { type: Array, required: true },
 });
+
+defineEmits(['editTodo', 'deleteTodo', 'updateTodo']);
 </script>
